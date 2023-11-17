@@ -43,7 +43,7 @@ const memoryUpload = multer({
 
 
 router.route("/")
-    .post(/* blacklist.isTokenBlacklisted,*/ verifyToken, allowedTo(userRoles.TEACHER), upload.single('pdfFile'), lessonController.uploadLesson)
+    .post(/* blacklist.isTokenBlacklisted, verifyToken, allowedTo(userRoles.TEACHER),*/ upload.single('pdfFile'), lessonController.uploadLesson)
     .get(lessonController.retrieveLessons)
 
 router.route("/:id")
