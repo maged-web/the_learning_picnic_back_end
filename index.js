@@ -25,6 +25,7 @@ const lessonRouter = require("./routes/lesson.route")
 const quizRouter = require("./routes/quiz.route")
 const modelRouter = require("./routes/modelAnswer.route")
 const submitQuizRoute = require("./routes/submitQuiz.route")
+const gradesRoute = require("./routes/grades.route")
 
 
 
@@ -33,7 +34,7 @@ app.use("/lessons", lessonRouter)
 app.use("/quizes", quizRouter)
 app.use("/modelAnswer", modelRouter)
 app.use('/submitQuiz', submitQuizRoute)
-
+app.use('/grades', gradesRoute)
 
 app.all('*', (req, res) => {
     return res.status(404).json({ status: httpStatusText.ERROR, msg: 'this resource is not avaliable', code: 404 })

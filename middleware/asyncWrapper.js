@@ -3,3 +3,4 @@ module.exports = (asyncFn) => {
         asyncFn(req, res, next).catch((err) => next(err));
     }
 }
+
