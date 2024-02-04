@@ -1,14 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const modelAnswerController = require('../controllers/modelAnswer.controller')
+const modelAnswerController = require('../controllers/modelAnswer.controller');
+const verifyToken = require("../middleware/verifyToken");
+const allowedTo = require("../middleware/allowedTo");
+const userRoles = require("../utils/userRoles");
 
-router.route('/:quizId')
-    .post(modelAnswerController.createModelAnswer)
 
 router.route('/:modelAnswerId')
-    .delete(modelAnswerController.deleteModelAnswer)
+    .delete(verifyToken , allowedTo(userRoles.TEACHER) , modelAnswerController.deleteModelAnswer)
 
-router.route('/:lessonId/:quizId')
-    .get(modelAnswerController.getModelAnswer)
+router.route('/:quizId')
+    .get(verifyToken , modelAnswerController.getModelAnswer)
 
 module.exports = router

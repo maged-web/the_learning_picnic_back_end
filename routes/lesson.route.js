@@ -5,7 +5,6 @@ const multer = require("multer");
 const verifyToken = require("../middleware/verifyToken");
 const allowedTo = require("../middleware/allowedTo");
 const userRoles = require("../utils/userRoles");
-//const blacklist = require("../middleware/blackList")
 const appError = require("../utils/appError")
 
 const diskStorage = multer.diskStorage(
@@ -22,14 +21,13 @@ const diskStorage = multer.diskStorage(
 
     }
 )
-
 const fileFilter = (req, file, cb) => {
     const pdfType = file.mimetype.split("/")[1];
     if (pdfType === 'pdf') {
         return cb(null, true)
     }
     else
-        return cb(appError.create('file must be pdf', 400, false))
+        return cb(appError.create('file must be pdf', 404, false))
 }
 
 
@@ -43,13 +41,16 @@ const memoryUpload = multer({
 
 
 router.route("/")
-    .post(/* blacklist.isTokenBlacklisted, verifyToken, allowedTo(userRoles.TEACHER),*/ upload.single('pdfFile'), lessonController.uploadLesson)
-    .get(lessonController.retrieveLessons)
+    .post(verifyToken , allowedTo(userRoles.TEACHER) ,upload.single('pdfFile'), lessonController.uploadLesson)
+    .get(verifyToken , lessonController.retrieveLessons)
 
 router.route("/:id")
-    .get(lessonController.retrieveLesson)
-    .delete(lessonController.deleteLesson)
-    .put(upload.single('pdfFile'), lessonController.updateLesson)
+    .get(verifyToken ,lessonController.retrieveLesson)
+    .delete(verifyToken , allowedTo(userRoles.TEACHER),lessonController.deleteLesson)
+    .put(verifyToken , allowedTo(userRoles.TEACHER),upload.single('pdfFile'), lessonController.updateLesson)
+
+router.route("/download/:id")
+      .get( verifyToken, lessonController.downloadLesson) 
 
 
 
