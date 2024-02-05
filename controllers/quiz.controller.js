@@ -112,7 +112,7 @@ const retrieveQuizes = asyncWrapper(async (req, res, next) => {
 module.exports = {
     createQuiz,
     deleteQuiz,
-    retrieveQuize,
+    retrieveQuiz,
     retrieveQuizes,
     // retrieveLessonQuizes
 }

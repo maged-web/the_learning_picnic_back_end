@@ -13,7 +13,7 @@ router.route('/:quizId')
     .delete(verifyToken , allowedTo(userRoles.TEACHER),quizController.deleteQuiz)
 
 router.route('/:id')
-    .get(verifyToken , quizController.retrieveQuize)
+    .get(verifyToken , quizController.retrieveQuiz)
 
 
 router.route('/')

@@ -60,7 +60,7 @@ const sumbitUserAnswers = asyncWrapper( async(req,res,next) => {
         await newQuizResult.save()  
     }
     
-    res.status(200).json({ status: httpStatusText.SUCCESS, data: {Score: userId} });
+    res.status(200).json({ status: httpStatusText.SUCCESS, data: {Score: grade} });
 });
 
 
