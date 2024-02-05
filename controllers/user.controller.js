@@ -32,7 +32,7 @@ const register = asyncWrapper(async (req, res, next) => {
     res.status(200).json({ status: httpStatusText.SUCCESS, data: { user: newUser } })
 
 
-})
+});
 
 const login = asyncWrapper(async (req, res, next) => {
     const { email, password } = req.body;
@@ -56,8 +56,7 @@ const login = asyncWrapper(async (req, res, next) => {
         const error = appError.create("something wroung", 500, httpStatusText.ERROR)
         return next(error)
     }
-})
-
+});
 
 /* const logout = (req, res,) => {
     // const token = req.headers['Authorization'] || req.headers['authorization'] 

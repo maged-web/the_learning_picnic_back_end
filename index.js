@@ -1,17 +1,18 @@
 require("dotenv").config()
 const express = require("express")
+const cors = require("cors")
 const app = express();
 
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 const path = require("path")
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
 
 const mongoose = require("mongoose")
-
 
 const httpStatusText = require("./utils/httpStatusText")
 
@@ -24,17 +25,14 @@ const userRoute = require("./routes/user.route")
 const lessonRouter = require("./routes/lesson.route")
 const quizRouter = require("./routes/quiz.route")
 const modelRouter = require("./routes/modelAnswer.route")
-const submitQuizRoute = require("./routes/submitQuiz.route")
-const gradesRoute = require("./routes/grades.route")
-
-
+const AnswersRouter = require("./routes/userAnswers.route")
 
 app.use("/users", userRoute)
 app.use("/lessons", lessonRouter)
 app.use("/quizes", quizRouter)
 app.use("/modelAnswer", modelRouter)
-app.use('/submitQuiz', submitQuizRoute)
-app.use('/grades', gradesRoute)
+app.use("/Answers",AnswersRouter)
+
 
 app.all('*', (req, res) => {
     return res.status(404).json({ status: httpStatusText.ERROR, msg: 'this resource is not avaliable', code: 404 })
