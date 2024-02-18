@@ -4,7 +4,7 @@ const submitQuizController = require("../controllers/submitQuiz.controller")
 const verifyToken = require("../middleware/verifyToken")
 
 router.route('/:id')
-    .post(verifyToken, submitQuizController.submitQuiz)
+    .post(/* verifyToken */ submitQuizController.submitQuiz)
     .get(submitQuizController.getQuizAnswers)
 
 

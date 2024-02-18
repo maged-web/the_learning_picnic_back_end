@@ -11,6 +11,10 @@ const quizSchema = new mongoose.Schema({
         ref: 'Lesson',
         required: true
     },
+    deadline: {
+        type: Date,
+        required: true
+    },
     questions: [
         {
             questionText:

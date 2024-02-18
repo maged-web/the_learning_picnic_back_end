@@ -5,15 +5,26 @@ const httpStatusText = require("../utils/httpStatusText")
 const appError = require("../utils/appError")
 const Grade = require("../models/grade.model")
 const QuizModel = require("../models/quiz.model")
+const Quiz = require("../models/quiz.model")
+
 
 const submitQuiz = asyncWrapper(async (req, res, next) => {
     const quizId = req.params.id;
     const userId = req.currentUser.id;
     const { answers } = req.body
 
+    const quiz = await Quiz.findById(quizId);
+    if (!quiz) {
+        return res.status(404).json({ status: httpStatusText.FAIL, data: 'Quiz not found' });
+    }
+
+    if (quiz.deadline && new Date() > new Date(quiz.deadline)) {
+        return res.status(400).json({ status: httpStatusText.FAIL, data: 'Quiz deadline has passed' });
+    }
+
     const Check = await SubmitedQuiz.findOne({ userId: userId, quizId: quizId })
     if (Check) {
-        return res.status(400).json({ status: httpStatusText.FAIL, data: 'you only have one chance ' });
+        return res.status(400).json({ status: httpStatusText.FAIL, data: 'you only have one chance' });
 
     }
 
@@ -26,6 +37,10 @@ const submitQuiz = asyncWrapper(async (req, res, next) => {
     await newSubmit.save();
     const modelAnswer = await ModelAnswer.findOne({ quizId: quizId });
 
+    if (!modelAnswer) {
+        return res.status(400).json({ status: httpStatusText.FAIL, data: 'The model asnwer not submited yet' });
+
+    }
 
     let score = 0;
     const totalQuestions = modelAnswer.answers.length;

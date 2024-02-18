@@ -32,9 +32,13 @@ const createQuiz = asyncWrapper(async (req, res, next) => {
             ]
         }
     ];
+    const deadline = new Date();
+    deadline.setDate(deadline.getDate() + 7);
+
     const newQuiz = new Quiz({
         lessonName: lessonName,
         lessonId: lessonId,
+        deadline: deadline,
         questions: questions
     })
     await newQuiz.save();
