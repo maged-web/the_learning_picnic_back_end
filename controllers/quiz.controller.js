@@ -18,6 +18,30 @@ const createQuiz = asyncWrapper(async (req, res, next) => {
     }
 
     const lessonName = lesson.name
+<<<<<<< HEAD
+    const questions = [
+        {
+            questionText: 'What is 2 + 2?',
+            choices: [
+                { choiceText: '3' },
+                { choiceText: '4' },
+                { choiceText: '5' },
+                { choiceText: '6' }
+            ]
+        },
+        {
+            questionText: 'What is the 1 + 1?',
+            choices: [
+                { choiceText: '2' },
+                { choiceText: '8' },
+                { choiceText: '9' },
+                { choiceText: '10' }
+            ]
+        }
+    ];
+    const deadline = new Date();
+    deadline.setDate(deadline.getDate() + 7);
+=======
     const lessonfile = lesson.pdfFile
 
     const pdfPath = path.join(path.join(__dirname, '../uploads'), lessonfile);
@@ -36,10 +60,12 @@ const createQuiz = asyncWrapper(async (req, res, next) => {
          questions = JSON.parse(questions_data)
          answers = JSON.parse(answers_data)
     }
+>>>>>>> 5a81be6cf4a19dfe80b0594cf460e9918def4c23
 
     const newQuiz = new Quiz({
         lessonName: lessonName,
         lessonId: lessonId,
+        deadline: deadline,
         questions: questions
     })
     await newQuiz.save();
