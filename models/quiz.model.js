@@ -47,11 +47,17 @@ const quizSchema = new mongoose.Schema({
                         required: true
                     }
                 }
-            ]
+            ],
+            scorePercentage: {
+                type: Number,
+                default: 1
+            },
+            timesAnswered: {
+                type: Number,
+                default: 0
+            },
         }
     ]
-}
-
-)
+});
 
 module.exports = mongoose.model("Quiz", quizSchema)

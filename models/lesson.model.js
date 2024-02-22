@@ -18,6 +18,10 @@ const lessonSchema = new mongoose.Schema(
             type: String,
             default: ''
         },
+         /* fileData:
+        {
+            type: Buffer
+        } */
     }
 )
 module.exports = mongoose.model("Lesson", lessonSchema)
