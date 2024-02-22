@@ -7,14 +7,10 @@ const userRoles = require("../utils/userRoles");
 
 router.route('/:lessonId')
     .post(verifyToken ,allowedTo(userRoles.TEACHER),quizController.createQuiz)
-    // .get(quizController.retrieveLessonQuizes)
 
 router.route('/:quizId')
     .delete(verifyToken , allowedTo(userRoles.TEACHER),quizController.deleteQuiz)
-
-router.route('/:id')
-    .get(verifyToken , quizController.retrieveQuize)
-
+    .get(verifyToken,quizController.retrieveQuiz)
 
 router.route('/')
     .get(verifyToken , quizController.retrieveQuizes)

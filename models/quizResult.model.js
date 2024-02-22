@@ -7,12 +7,19 @@ const resultSchema = new mongoose.Schema ({
         ref: 'User',
         required: true
     },
-    
+    userName : {
+        type : String,
+        required : true
+    },
     quizGrades : [
         {
             quizId :{
                 type : mongoose.Schema.Types.ObjectId,
                 ref :'Quiz',
+                required : true
+            },
+            LessonName :{
+                type : String,
                 required : true
             },
             score :{

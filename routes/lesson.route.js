@@ -41,17 +41,13 @@ const memoryUpload = multer({
 
 
 router.route("/")
-    .post(verifyToken , allowedTo(userRoles.TEACHER) ,upload.single('pdfFile'), lessonController.uploadLesson)
-    .get(verifyToken , lessonController.retrieveLessons)
+    .post(verifyToken,allowedTo(userRoles.TEACHER),upload.single('pdfFile'), lessonController.uploadLesson)
+    .get(verifyToken,lessonController.retrieveLessons)
 
 router.route("/:id")
-    .get(verifyToken ,lessonController.retrieveLesson)
-    .delete(verifyToken , allowedTo(userRoles.TEACHER),lessonController.deleteLesson)
-    .put(verifyToken , allowedTo(userRoles.TEACHER),upload.single('pdfFile'), lessonController.updateLesson)
-
-router.route("/download/:id")
-      .get( verifyToken, lessonController.downloadLesson) 
-
+    .get(verifyToken,lessonController.retrieveLesson)
+    .delete(verifyToken,allowedTo(userRoles.TEACHER),lessonController.deleteLesson)
+    .put(allowedTo(userRoles.TEACHER),upload.single('pdfFile'), lessonController.updateLesson)
 
 
 

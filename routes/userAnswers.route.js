@@ -6,6 +6,6 @@ const allowedTo = require("../middleware/allowedTo");
 const userRoles = require("../utils/userRoles");
 
 router.route('/:id')
-    .post(verifyToken,allowedTo(userRoles.STUDENT), userAnswersController.sumbitUserAnswers)
+    .post(verifyToken,allowedTo(userRoles.STUDENT), userAnswersController.submitUserAnswers)
 
 module.exports = router;
