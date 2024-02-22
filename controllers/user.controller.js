@@ -146,15 +146,18 @@ const addChildEmail = asyncWrapper(async(req,res,next)=>{
     }
 
     if (childernEmails && childernEmails.length > 0) {
-        const children = await User.find({ email: { $in: childernEmails } });
+        const existingChildren = await User.find({ email: { $in: childernEmails } });
+        const newEmails = childernEmails.filter(email => !parent.childernEmails.includes(email));
 
-        if (children.length !== childernEmails.length) {
+        if (newEmails.length > 0) {
+            parent.childernEmails = parent.childernEmails.concat(newEmails);
+        }
+
+        if (existingChildren.length !== childernEmails.length) {
             const error = appError.create("Check again your child emails", 400, httpStatusText.FAIL);
             return res.status(error.statusCode).json({ error });
         }
-        parent.childernEmails = childernEmails;
     }
-
     await parent.save();
     res.json({ status: httpStatusText.SUCCESS, data: { childernEmails : childernEmails } });
 });

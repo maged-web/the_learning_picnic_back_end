@@ -5,12 +5,15 @@ const asyncWrapper = require("../middleware/asyncWrapper");
 const httpStatusText = require("../utils/httpStatusText");
 const appError = require("../utils/appError");
 const Quiz = require("../models/quiz.model");
+const User = require("../models/user.model")
 
 const submitUserAnswers = asyncWrapper( async(req,res,next) => {
     const quizId = req.params.id;
     const userId = req.currentUser.id;
     const { answers } = req.body;
+    const user = await User.findById(userId)
     const quiz = await Quiz.findById(quizId);
+    const userName = `${user.firstName} ${user.lastName}`;
     if (!quiz) {
         return res.status(404).json({ status: httpStatusText.FAIL, data: 'Quiz not found' });
     }
@@ -19,15 +22,16 @@ const submitUserAnswers = asyncWrapper( async(req,res,next) => {
         return res.status(400).json({ status: httpStatusText.FAIL, data: 'Quiz deadline has passed' });
     }
 
-    const check = await userAnswers.findOne({ userId:userId , quizId:quizId });
-    if(check){
+    // const check = await userAnswers.findOne({ userId:userId , quizId:quizId });
+    // if(check){
 
-        const error = appError.create("You already have taken this quiz", 400, httpStatusText.FAIL)
-        return res.status(error.statusCode).json({error})
-    }
+    //     const error = appError.create("You already have taken this quiz", 400, httpStatusText.FAIL)
+    //     return res.status(error.statusCode).json({error})
+    // }
 
     const newUserAnswers = new userAnswers({
         userId: userId,
+        userName : userName,
         quizId: quizId,
         answers: answers
     })
@@ -44,33 +48,35 @@ const submitUserAnswers = asyncWrapper( async(req,res,next) => {
         if (ModelAnswer.answers[j].answerText === answers[j]?.answerText) {
             correctAnswers++;
             quiz.questions[j].scorePercentage =
-               (((quiz.questions[j].scorePercentage * quiz.questions[j].timesAnswered) + 1) /
-                (quiz.questions[j].timesAnswered + 1)) * 100;
+               ((quiz.questions[j].scorePercentage * quiz.questions[j].timesAnswered) + 1) /
+                (quiz.questions[j].timesAnswered + 1);
                 quiz.questions[j].timesAnswered++;
         } else {
             quiz.questions[j].scorePercentage =
                 ((quiz.questions[j].scorePercentage * quiz.questions[j].timesAnswered) /
-                (quiz.questions[j].timesAnswered + 1)) * 100;
+                (quiz.questions[j].timesAnswered + 1));
             quiz.questions[j].timesAnswered++;
         }
     }
 
     const grade = (correctAnswers / numberOfQuestiosn) * 100;
+    const LessonName = quiz.lessonName;
 
         const quizGrades = [
         {
             quizId: quizId,
+            LessonName : LessonName,
             score: grade + "%"
         }
     ];
-
     const existingUser = await quizResult.findOne({ userId: userId });
     if (existingUser) {
-        existingUser.quizGrades.push({ quizId: quizId, score: grade + "%" });
+        existingUser.quizGrades.push({ quizId: quizId,LessonName: LessonName ,score: grade + "%" });
         await existingUser.save();
     } else {
         const newQuizResult = new quizResult({
             userId: userId,
+            userName : userName,
             quizGrades: quizGrades
         });
         await newQuizResult.save();
